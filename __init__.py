@@ -120,7 +120,9 @@ class BackToNormal():
 
 
 ### CATALOG SECTION ###
-
+@app.route("/atlassian-domain-verification.html", methods=["GET"])
+def render_atlas():
+	return render_template("jira.html")
 @app.route("/", methods=["GET"])
 def render_react_app():
 	return render_template("index.html")
