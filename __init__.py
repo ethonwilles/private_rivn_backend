@@ -544,5 +544,12 @@ def new_placeholder():
     elif request.method == "GET":
         
         return {"num" :check_place}
+@app.route("/get-info/<url>", methods=["GET"])
+def get_info(url):
+	RivnScrape()
+	item = AuditResults.query.filter_by(url=url).first()
+	query = { "html" : item.consent_html, "cons" : item.has_consent, "priv_url" : item.privacy_url, "has_priv" : item.has_privacy, "url" : item.url, "id" : item.id}
+	BackToNormal()
+	return query
 if __name__ == "__main__":
     app.run(debug=True)
