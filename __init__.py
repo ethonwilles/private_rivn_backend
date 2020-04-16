@@ -532,13 +532,17 @@ def post():
         BackToNormal()
 
         return vendor
-@app.route("/new-placeholder", methods=["POST"])
+@app.route("/new-placeholder", methods=["GET","POST"])
 def new_placeholder():
-    
     global check_place
-    old_placeholder = check_place
-    new_placeholder = request.json["number"]
-    check_place = new_placeholder
-    return {"OLD" : old_placeholder, "new" : new_placeholder}
+    if request.method == "POST":
+        
+        old_placeholder = check_place
+        new_placeholder = request.json["number"]
+        check_place = new_placeholder
+        return {"OLD" : old_placeholder, "new" : check_place}
+    elif request.method == "GET":
+        
+        return {"num" :check_place}
 if __name__ == "__main__":
     app.run(debug=True)
