@@ -23,7 +23,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://jtippets@rivn-db-dev:Ja
 
 db = SQLAlchemy(app)
 
-
+check_place = 0
 
 
 class VendorCatalog(db.Model):
@@ -117,6 +117,9 @@ class RivnScrape():
 class BackToNormal():
     def __init__(self):
         app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://jtippets@rivn-db-dev:Jacks0n1@rivn-db-dev.mysql.database.azure.com:3306/delete_vendors"
+class CheckPlace():
+    def __init__(self, num):
+        self.num = num
 
 
 ### CATALOG SECTION ###
@@ -456,12 +459,13 @@ def get_urls():
             return {"SUCCESS" : False}
 @app.route('/audit-results-urls', methods=["GET"])
 def test():
+    global check_place
     RivnScrape()
     results = []
     length_of_audit = AuditResults.query.all()
     for i in length_of_audit:
-        
-        results.append(i.url)
+        if i.id >= check_place:
+            results.append(i.url)
     
     
     BackToNormal()
@@ -528,5 +532,13 @@ def post():
         BackToNormal()
 
         return vendor
+@app.route("/new-placeholder", methods=["POST"])
+def new_placeholder():
+    
+    global check_place
+    old_placeholder = check_place
+    new_placeholder = request.json["number"]
+    check_place = new_placeholder
+    return {"OLD" : old_placeholder, "new" : new_placeholder}
 if __name__ == "__main__":
     app.run(debug=True)
