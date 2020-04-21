@@ -4,7 +4,7 @@ import pymysql
 from sqlalchemy import create_engine, update
 import urllib
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 
 from flask_cors import CORS
 
@@ -551,5 +551,48 @@ def get_info(url):
 	query = { "html" : item.consent_html, "cons" : item.has_consent, "priv_url" : item.privacy_url, "has_priv" : item.has_privacy, "url" : item.url, "id" : item.id}
 	BackToNormal()
 	return query
+
+
+
+
+
+
+
+
+
+######## IMAGE SERVER ##########
+@app.route("/take-screenshot/<url>")
+def take_screenshot(url):
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from time import sleep
+
+    
+    if url[:4] == "www.":
+        
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(options=options)
+        driver.get(f'https://{url}')
+        sleep(1)
+        driver.find_element_by_tag_name('body').screenshot(f'./static/{url}.png')
+        driver.quit()
+    else:
+       
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(options=options)
+        url = f"https://www.{url}"
+        driver.get(url)
+        sleep(1)                                                                                                      
+        driver.find_element_by_tag_name('body').screenshot(f'./static/{url}.png')
+        driver.quit()
+    return send_from_directory("static", filename=f"{url}.png")
 if __name__ == "__main__":
     app.run(debug=True)
