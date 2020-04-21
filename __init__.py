@@ -563,36 +563,39 @@ def get_info(url):
 ######## IMAGE SERVER ##########
 @app.route("/take-screenshot", methods=["POST"])
 def take_screenshot():
-    from selenium import webdriver
-    from selenium.webdriver.chrome.options import Options
-    from time import sleep
-    url = request.json["url"]
-    
-    if url[:4] == "www.":
+    try:
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
+        from time import sleep
+        url = request.json["url"]
         
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(options=options)
-        driver.get('https://{}.com'.format(url))
-        sleep(1)
-        driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
-        driver.quit()
-    else:
-       
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(options=options)
-        url = "https://www.{}.com".format(url)
-        driver.get(url)
-        sleep(1)                                                                                                      
-        driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
-        driver.quit()
-    return send_from_directory("static", filename="{}.png".format(url))
+        if url[:4] == "www.":
+            
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--no-sandbox")
+            driver = webdriver.Chrome(options=options)
+            driver.get('https://{}.com'.format(url))
+            sleep(1)
+            driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
+            driver.quit()
+        else:
+        
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--no-sandbox")
+            driver = webdriver.Chrome(options=options)
+            url = "https://www.{}.com".format(url)
+            driver.get(url)
+            sleep(1)                                                                                                      
+            driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
+            driver.quit()
+        return send_from_directory("static", filename="{}.png".format(url))
+    except Exception as e:
+        return "{}".format(e)
 if __name__ == "__main__":
     app.run(debug=True)
