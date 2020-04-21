@@ -577,7 +577,7 @@ def take_screenshot():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(options=options)
-    driver.get('https://{}.com'.format(url))
+    driver.get('https://www.{}.com'.format(url))
     sleep(1)
     driver.find_element_by_tag_name('body').screenshot('{}.png'.format(url))
     driver.quit()
