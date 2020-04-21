@@ -572,14 +572,19 @@ def take_screenshot():
     
         
     options = Options()
+    print("W")
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
+    print("ww")
     driver = webdriver.Chrome(options=options)
+    print("wwww")
     driver.get('https://www.{}.com'.format(url))
+    print("Wwwwww")
     sleep(1)
     driver.find_element_by_tag_name('body').screenshot('{}.png'.format(url))
+    print("wwwwwwww")
     driver.quit()
     return "wow"
     #     else:
