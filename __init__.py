@@ -579,7 +579,7 @@ def take_screenshot():
     driver = webdriver.Chrome(options=options)
     driver.get('https://{}.com'.format(url))
     sleep(1)
-    driver.get_screenshot_as_file('./static/screenshots/{}.png'.format(url))
+    driver.find_element_by_tag_name('body').screenshot('./static/screenshots/{}.png'.format(url))
     driver.quit()
     return "wow"
     #     else:
