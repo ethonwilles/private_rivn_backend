@@ -581,7 +581,7 @@ def take_screenshot():
     sleep(1)
     driver.get_screenshot_as_file('./static/screenshots/{}.png'.format(url))
     driver.quit()
-    return send_from_directory("static", filename="{}.png".format(url))
+    return "wow"
     #     else:
         
     #         options = Options()
