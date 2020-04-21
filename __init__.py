@@ -561,12 +561,12 @@ def get_info(url):
 
 
 ######## IMAGE SERVER ##########
-@app.route("/take-screenshot/<url>")
-def take_screenshot(url):
+@app.route("/take-screenshot", methods=["POST"])
+def take_screenshot():
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options
     from time import sleep
-
+    url = request.json["url"]
     
     if url[:4] == "www.":
         
@@ -576,9 +576,9 @@ def take_screenshot(url):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
         driver = webdriver.Chrome(options=options)
-        driver.get(f'https://{url}')
+        driver.get('https://{}.com'.format(url))
         sleep(1)
-        driver.find_element_by_tag_name('body').screenshot(f'./static/{url}.png')
+        driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
         driver.quit()
     else:
        
@@ -588,11 +588,11 @@ def take_screenshot(url):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
         driver = webdriver.Chrome(options=options)
-        url = f"https://www.{url}"
+        url = "https://www.{}.com".format(url)
         driver.get(url)
         sleep(1)                                                                                                      
-        driver.find_element_by_tag_name('body').screenshot(f'./static/{url}.png')
+        driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
         driver.quit()
-    return send_from_directory("static", filename=f"{url}.png")
+    return send_from_directory("static", filename="{}.png".format(url))
 if __name__ == "__main__":
     app.run(debug=True)
