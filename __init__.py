@@ -4,7 +4,7 @@ import pymysql
 from sqlalchemy import create_engine, update
 import urllib
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, send_file
 
 from flask_cors import CORS
 from selenium import webdriver
@@ -583,10 +583,10 @@ def take_screenshot():
     driver.get('https://www.{}.com'.format(url))
     
     sleep(1)
-    driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
+    driver.find_element_by_tag_name('body').screenshot('static/{}.png'.format(url))
     
     driver.quit()
-    return "wow"
+    return send_from_directory("static", filename="file.png")
     #     else:
         
     #         options = Options()
