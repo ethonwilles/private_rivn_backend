@@ -579,30 +579,30 @@ def schedule_scan():
 
 
 
-# ######## IMAGE SERVER ##########
-# @app.route("/take-screenshot", methods=["POST"])
-# def take_screenshot():
+######## IMAGE SERVER ##########
+@app.route("/take-screenshot/<url>", methods=["GET"])
+def take_screenshot(url):
     
-#     url = request.json["url"]
+    
     
     
         
-#     options = Options()
+    options = Options()
     
-#     options.add_argument("--headless")
-#     options.add_argument("--disable-gpu")
-#     options.add_argument("--disable-dev-shm-usage")
-#     options.add_argument("--no-sandbox")
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
    
-#     driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(options=options)
     
-#     driver.get('https://www.{}.com'.format(url))
+    driver.get('https://{}'.format(url))
     
-#     sleep(1)
-#     driver.find_element_by_tag_name('body').screenshot('~/{}.png'.format(url))
+    sleep(1)
+    driver.find_element_by_tag_name('body').screenshot('./static/screenshots/{}.png'.format(url))
     
-#     driver.quit()
-#     return send_from_directory("static", filename="{}.png".format(url))
+    driver.quit()
+    return send_from_directory("static/screenshots", filename="{}.png".format(url))
 #     #     else:
         
 #     #         options = Options()
