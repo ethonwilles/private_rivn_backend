@@ -565,10 +565,10 @@ def schedule_scan():
 
         for item in items:
             
-            cronjobs = open("./cronjobs/{}.json".format(item["url"]), "w+")
+            cronjobs = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "w+")
             cronjobs.write(json.dumps({ item["url"] : item["date"]}))
             cronjobs.close()
-            cronjob_created = open("cronjobs/{}.json".format(item["url"]), "r")
+            cronjob_created = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "r")
             lines = cronjob_created.read()
             
         return "SAVED"
