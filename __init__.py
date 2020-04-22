@@ -599,30 +599,15 @@ def take_screenshot(url):
     driver.get('https://{}'.format(url))
     
     sleep(1)
-    screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
+    driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.png".format(url))
+    # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
     driver.quit()
-    ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
-    ss.write(screenshot)
-    ss.close()
+    # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
+    # ss.write(screenshot)
+    # ss.close()
 
     
     
-    return send_file("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url))
-#     #     else:
-        
-#     #         options = Options()
-#     #         options.add_argument("--headless")
-#     #         options.add_argument("--disable-gpu")
-#     #         options.add_argument("--disable-dev-shm-usage")
-#     #         options.add_argument("--no-sandbox")
-#     #         driver = webdriver.Chrome(options=options)
-#     #         url = "https://www.{}.com".format(url)
-#     #         driver.get(url)
-#     #         sleep(1)                                                                                                      
-#     #         driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
-#     #         driver.quit()
-#     #     return send_from_directory("static", filename="{}.png".format(url))
-#     # except Exception as e:
-#     #     return "{}".format(e)
+    return send_file("/var/www/FlaskApp/FlaskApp/screenshots/{}.png".format(url))
 if __name__ == "__main__":
     app.run(debug=True)
