@@ -601,7 +601,7 @@ def take_screenshot(url):
     sleep(1)
     screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
     driver.quit()
-    ss = open("static/screenshots/{}.txt".format(url), "w+")
+    ss = open("./static/screenshots/{}.txt".format(url), "w+")
     ss.write(screenshot)
     ss.close()
 
