@@ -599,10 +599,15 @@ def take_screenshot(url):
     driver.get('https://{}'.format(url))
     
     sleep(1)
-    driver.find_element_by_tag_name('body').screenshot('./static/screenshots/{}.png'.format(url))
-    
+    screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
     driver.quit()
-    return send_from_directory("static/screenshots", filename="{}.png".format(url))
+    ss = open("static/screenshots/{}.txt".format(url), "w+")
+    ss.write(screenshot)
+    ss.close()
+
+    
+    
+    return send_file("./static/screenshots/{}.txt".format(url))
 #     #     else:
         
 #     #         options = Options()
