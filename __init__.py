@@ -583,10 +583,10 @@ def take_screenshot():
     driver.get('https://www.{}.com'.format(url))
     
     sleep(1)
-    driver.find_element_by_tag_name('body').screenshot('static/{}.png'.format(url))
+    driver.find_element_by_tag_name('body').screenshot('/var/www/FlaskApp/FlaskApp/static/{}.png'.format(url))
     
     driver.quit()
-    return send_from_directory("static", filename="file.png")
+    return send_from_directory("static", filename="{}.png".format(url))
     #     else:
         
     #         options = Options()
