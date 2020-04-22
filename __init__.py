@@ -11,7 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 
-
+import json
 
 
 params = pymysql.connect(user="jtippets@rivn-db-dev", password='Jacks0n1', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
@@ -558,50 +558,66 @@ def get_info(url):
 
 
 
+@app.route("/schedule-scan", methods=["POST"])
+def schedule_scan():
+    items = request.json["items"]
+    if type(items) == list:
+
+        for item in items:
+            
+            cronjobs = open("./cronjobs/{}.json".format(item["url"]), "w+")
+            cronjobs.write(json.dumps({ item["url"] : item["date"]}))
+            cronjobs.close()
+            cronjob_created = open("cronjobs/{}.json".format(item["url"]), "r")
+            lines = cronjob_created.read()
+            
+        return "SAVED"
+        
+    else:
+        return "ERROR! Expected list, Got Something Else. Please format so object is in {'items: [{'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}, {'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}]}"
 
 
 
 
-
-######## IMAGE SERVER ##########
-@app.route("/take-screenshot", methods=["POST"])
-def take_screenshot():
+# ######## IMAGE SERVER ##########
+# @app.route("/take-screenshot", methods=["POST"])
+# def take_screenshot():
     
-    url = request.json["url"]
+#     url = request.json["url"]
     
     
         
-    options = Options()
+#     options = Options()
     
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--no-sandbox")
+#     options.add_argument("--headless")
+#     options.add_argument("--disable-gpu")
+#     options.add_argument("--disable-dev-shm-usage")
+#     options.add_argument("--no-sandbox")
    
-    driver = webdriver.Chrome(options=options)
+#     driver = webdriver.Chrome(options=options)
     
-    driver.get('https://www.{}.com'.format(url))
+#     driver.get('https://www.{}.com'.format(url))
     
-    sleep(1)
-    driver.find_element_by_tag_name('body').screenshot('~/{}.png'.format(url))
+#     sleep(1)
+#     driver.find_element_by_tag_name('body').screenshot('~/{}.png'.format(url))
     
-    driver.quit()
-    return send_from_directory("static", filename="{}.png".format(url))
-    #     else:
+#     driver.quit()
+#     return send_from_directory("static", filename="{}.png".format(url))
+#     #     else:
         
-    #         options = Options()
-    #         options.add_argument("--headless")
-    #         options.add_argument("--disable-gpu")
-    #         options.add_argument("--disable-dev-shm-usage")
-    #         options.add_argument("--no-sandbox")
-    #         driver = webdriver.Chrome(options=options)
-    #         url = "https://www.{}.com".format(url)
-    #         driver.get(url)
-    #         sleep(1)                                                                                                      
-    #         driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
-    #         driver.quit()
-    #     return send_from_directory("static", filename="{}.png".format(url))
-    # except Exception as e:
-    #     return "{}".format(e)
+#     #         options = Options()
+#     #         options.add_argument("--headless")
+#     #         options.add_argument("--disable-gpu")
+#     #         options.add_argument("--disable-dev-shm-usage")
+#     #         options.add_argument("--no-sandbox")
+#     #         driver = webdriver.Chrome(options=options)
+#     #         url = "https://www.{}.com".format(url)
+#     #         driver.get(url)
+#     #         sleep(1)                                                                                                      
+#     #         driver.find_element_by_tag_name('body').screenshot('./static/{}.png'.format(url))
+#     #         driver.quit()
+#     #     return send_from_directory("static", filename="{}.png".format(url))
+#     # except Exception as e:
+#     #     return "{}".format(e)
 if __name__ == "__main__":
     app.run(debug=True)
