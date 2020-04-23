@@ -608,6 +608,6 @@ def take_screenshot(url):
 
     
     
-    return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots" filename="{}.png".format(url))
+    return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.png".format(url))
 if __name__ == "__main__":
     app.run(debug=True)
