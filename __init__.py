@@ -586,28 +586,30 @@ def take_screenshot(url):
     
     
     
+    try:
+        options = Options()
         
-    options = Options()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
     
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--no-sandbox")
-   
-    driver = webdriver.Chrome(options=options)
-    
-    driver.get('https://{}'.format(url))
-    
-    sleep(1)
-    driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.png".format(url))
-    # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
-    driver.quit()
-    # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
-    # ss.write(screenshot)
-    # ss.close()
+        driver = webdriver.Chrome(options=options)
+        
+        driver.get('https://{}'.format(url))
+        
+        sleep(1)
+        driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.png".format(url))
+        # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
+        driver.quit()
+        # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
+        # ss.write(screenshot)
+        # ss.close()
 
-    
-    
-    return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.png".format(url))
+        
+        
+        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.png".format(url))
+    except Exception as e:
+        return "An error Occured! ERROR: {}".format(e)
 if __name__ == "__main__":
     app.run(debug=True)
