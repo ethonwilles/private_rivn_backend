@@ -17,7 +17,7 @@ import datetime
 
 params = pymysql.connect(user="jtippets@rivn-db-dev", password='Jacks0n1', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
 
-conn_str = "mysql+pymysql:///{}?charset=utf8mb4".format(params)
+conn_str = f"mysql+pymysql:///{params}?charset=utf8mb4"
 engine_azure = create_engine(conn_str,echo=True)
 
 app = Flask(__name__)
@@ -159,7 +159,7 @@ def post_new_member():
             
             return {"CREATED": True}, 200
         except Exception as e:
-            return {"CREATED" : False, "CODE" : "{}".format(e)}
+            return {"CREATED" : False, "CODE" : f"{e}"}
 
 
 @app.route("/list-all-vendors", methods=["GET"])
@@ -232,7 +232,7 @@ def edit_vendor():
                 
                 return {"CREATED" : True}, 200
             except Exception as e:
-                return {"USER_FOUND" : False, "ERROR" : "{}".format(e)}, 500
+                return {"USER_FOUND" : False, "ERROR" : f"{e}"}, 500
     
         
 @app.route("/get-vendor-catalog", methods=["POST"])
@@ -256,7 +256,7 @@ def get_vendor_catalog():
                 
                 return vendor, 200
         except Exception as e:
-            return {'USER_FOUND' : False, "ERROR" : "{}".format(e)}, 500
+            return {'USER_FOUND' : False, "ERROR" : f"{e}"}, 500
     elif method_of_change == 'vendor_id':
         try:
                 vendor_id = request.json["vendor_id"]
@@ -275,7 +275,7 @@ def get_vendor_catalog():
                 
                 return vendor, 200
         except Exception as e:
-            return {'USER_FOUND' : False, "ERROR" : "{}".format(e)}, 500
+            return {'USER_FOUND' : False, "ERROR" : f"{e}"}, 500
 
 
 ### VENDORFORM SECTION ###
@@ -306,7 +306,7 @@ def post_new_member_form():
             
             return {"CREATED": True}, 200
         except Exception as e:
-            return {"CREATED" : False, "CODE" : "{}".format(e)}
+            return {"CREATED" : False, "CODE" : f"{e}"}
 
 
 @app.route("/edit-vendor-form", methods=["GET","POST"])
@@ -344,7 +344,7 @@ def edit_vendor_form():
                 
                 return {"CREATED" : True}, 200
             except Exception as e:
-                return {"USER_FOUND" : False, "ERROR" : "{}".format(e)}
+                return {"USER_FOUND" : False, "ERROR" : f"{e}"}
 
 @app.route("/get-vendor-form", methods=["POST"])
 def get_vendor_form():
@@ -367,7 +367,7 @@ def get_vendor_form():
                 
                 return vendor, 200
         except Exception as e:
-            return {'USER_FOUND' : False, "ERROR" : "{}".format(e)}
+            return {'USER_FOUND' : False, "ERROR" : f"{e}"}
     elif method_of_change == 'vendor_id':
         try:
                 vendor_id = request.json["vendor_id"]
@@ -387,7 +387,7 @@ def get_vendor_form():
                 return vendor, 200
         except Exception as e:
             print(Exception)
-            return {'USER_FOUND' : False, "ERROR" : "{}".format(e)}
+            return {'USER_FOUND' : False, "ERROR" : f"{e}"}
 
 @app.route("/list-all-forms", methods=["GET"])
 def get_names_form():
@@ -572,13 +572,13 @@ def schedule_scan():
         for item in items:
             
             for name in existing_files:
-                if name == "{}.json".format(item["url"]):
+                if name == f"{item["url"]}.json":
                     duplicates += 1
                 else:
-                    cronjobs = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "w+")
+                    cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item["url"]}.json", "w+")
                     cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
                     cronjobs.close()
-                    cronjob_created = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "r")
+                    cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item["url"]}.json", "r")
                     lines = cronjob_created.read()
             
         return {"SAVED": True, "DUPLICATES" : duplicates}
@@ -595,8 +595,8 @@ def take_screenshot(url):
     
     existing_pngs = os.scandir("/var/www/FlaskApp/FlaskApp/screenshots")
     for png in existing_pngs:
-        if png.name == "{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url):
-            return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
+        if png.name == f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png":
+            return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
         else:
             None
     
@@ -610,10 +610,10 @@ def take_screenshot(url):
     
         driver = webdriver.Chrome(options=options)
         
-        driver.get('https://{}'.format(url))
+        driver.get(f'https://{url}')
         
         sleep(1)
-        driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
+        driver.find_element_by_tag_name('body').screenshot(f"/var/www/FlaskApp/FlaskApp/screenshots/{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
         # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
         driver.quit()
         # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
@@ -622,8 +622,8 @@ def take_screenshot(url):
 
         
         
-        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
+        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
     except Exception as e:
-        return "An error Occured! ERROR: {}".format(e)
+        return f"An error Occured! ERROR: {e}"
 if __name__ == "__main__":
     app.run(debug=True)
