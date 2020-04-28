@@ -572,13 +572,13 @@ def schedule_scan():
         for item in items:
             
             for name in existing_files:
-                if name == f"{item["url"]}.json":
+                if name == f"{item['url']}.json":
                     duplicates += 1
                 else:
-                    cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item["url"]}.json", "w+")
+                    cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "w+")
                     cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
                     cronjobs.close()
-                    cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item["url"]}.json", "r")
+                    cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "r")
                     lines = cronjob_created.read()
             
         return {"SAVED": True, "DUPLICATES" : duplicates}
