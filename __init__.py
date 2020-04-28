@@ -595,7 +595,7 @@ def take_screenshot(url):
     
     existing_pngs = os.scandir("/var/www/FlaskApp/FlaskApp/screenshots")
     for png in existing_pngs:
-        if png.name == f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png":
+        if png.name == f"{datetime.datetime.now().strftime('%Y-%m-%d')}.{url}.png":
             return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime('%Y-%m-%d')}.{url}.png")
         else:
             None
