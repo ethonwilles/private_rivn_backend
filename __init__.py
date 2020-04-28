@@ -596,7 +596,7 @@ def take_screenshot(url):
     existing_pngs = os.scandir("/var/www/FlaskApp/FlaskApp/screenshots")
     for png in existing_pngs:
         if png.name == f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png":
-            return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
+            return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime('%Y-%m-%d')}.{url}.png")
         else:
             None
     
@@ -613,7 +613,7 @@ def take_screenshot(url):
         driver.get(f'https://{url}')
         
         sleep(1)
-        driver.find_element_by_tag_name('body').screenshot(f"/var/www/FlaskApp/FlaskApp/screenshots/{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
+        driver.find_element_by_tag_name('body').screenshot(f"/var/www/FlaskApp/FlaskApp/screenshots/{datetime.datetime.now().strftime('%Y-%m-%d')}.{url}.png")
         # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
         driver.quit()
         # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
@@ -622,7 +622,7 @@ def take_screenshot(url):
 
         
         
-        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime("%Y-%m-%d")}.{url}.png")
+        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename=f"{datetime.datetime.now().strftime('%Y-%m-%d')}.{url}.png")
     except Exception as e:
         return f"An error Occured! ERROR: {e}"
 if __name__ == "__main__":
