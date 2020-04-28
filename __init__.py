@@ -10,8 +10,9 @@ from flask_cors import CORS
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep
-
+import os
 import json
+import datetime
 
 
 params = pymysql.connect(user="jtippets@rivn-db-dev", password='Jacks0n1', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
@@ -561,17 +562,26 @@ def get_info(url):
 @app.route("/schedule-scan", methods=["POST"])
 def schedule_scan():
     items = request.json["items"]
+    cronjobs_dir = os.scandir("/var/www/FlaskApp/FlaskApp/cronjobs")
+    existing_files = []
+    duplicates = 0
+    for _file in cronjobs_dir:
+       existing_files.append(_file.name)
     if type(items) == list:
 
         for item in items:
             
-            cronjobs = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "w+")
-            cronjobs.write(json.dumps({ item["url"] : item["date"]}))
-            cronjobs.close()
-            cronjob_created = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "r")
-            lines = cronjob_created.read()
+            for name in existing_files:
+                if name == "{}.json".format(item["url"]):
+                    duplicates += 1
+                else:
+                    cronjobs = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "w+")
+                    cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
+                    cronjobs.close()
+                    cronjob_created = open("/var/www/FlaskApp/FlaskApp/cronjobs/{}.json".format(item["url"]), "r")
+                    lines = cronjob_created.read()
             
-        return "SAVED"
+        return {"SAVED": True, "DUPLICATES" : duplicates}
         
     else:
         return "ERROR! Expected list, Got Something Else. Please format so object is in {'items: [{'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}, {'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}]}"
@@ -583,8 +593,12 @@ def schedule_scan():
 @app.route("/take-screenshot/<url>", methods=["GET"])
 def take_screenshot(url):
     
-    
-    
+    existing_pngs = os.scandir("/var/www/FlaskApp/FlaskApp/screenshots")
+    for png in existing_pngs:
+        if png.name == "{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url):
+            return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
+        else:
+            None
     
     try:
         options = Options()
@@ -599,7 +613,7 @@ def take_screenshot(url):
         driver.get('https://{}'.format(url))
         
         sleep(1)
-        driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.png".format(url))
+        driver.find_element_by_tag_name('body').screenshot("/var/www/FlaskApp/FlaskApp/screenshots/{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
         # screenshot = driver.find_element_by_tag_name('body').screenshot_as_base64
         driver.quit()
         # ss = open("/var/www/FlaskApp/FlaskApp/screenshots/{}.txt".format(url), "w+")
@@ -608,7 +622,7 @@ def take_screenshot(url):
 
         
         
-        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.png".format(url))
+        return send_from_directory("/var/www/FlaskApp/FlaskApp/screenshots", filename="{}.{}.png".format(datetime.datetime.now().strftime("%Y-%m-%d"),url))
     except Exception as e:
         return "An error Occured! ERROR: {}".format(e)
 if __name__ == "__main__":
