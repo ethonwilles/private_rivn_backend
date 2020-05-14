@@ -569,14 +569,14 @@ def schedule_scan():
         for item in items:
             
             
-                    cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "w+")
-                    cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
-                    cronjobs.close()
-                    cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "r")
-                    lines = cronjob_created.read()
-                    lines.close()
+            cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "w+")
+            cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
+            cronjobs.close()
+            cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "r")
+            lines = cronjob_created.read()
+            lines.close()
             
-        return {"SAVED": True, "DUPLICATES" : duplicates}
+        return {"SAVED": True}
         
     else:
         return "ERROR! Expected list, Got Something Else. Please format so object is in {'items: [{'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}, {'url' : 'url_of_site', 'date' : 'date_to_be_scanned'}]}"
