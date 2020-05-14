@@ -563,18 +563,12 @@ def get_info(url):
 def schedule_scan():
     items = request.json["items"]
     cronjobs_dir = os.scandir("/var/www/FlaskApp/FlaskApp/cronjobs")
-    existing_files = []
-    duplicates = 0
-    for _file in cronjobs_dir:
-       existing_files.append(_file.name)
+    
     if type(items) == list:
 
         for item in items:
             
-            for name in existing_files:
-                if name == f"{item['url']}.json":
-                    duplicates += 1
-                else:
+            
                     cronjobs = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "w+")
                     cronjobs.write(json.dumps({ item["url"] : item["freq"]}))
                     cronjobs.close()
