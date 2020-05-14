@@ -580,6 +580,7 @@ def schedule_scan():
                     cronjobs.close()
                     cronjob_created = open(f"/var/www/FlaskApp/FlaskApp/cronjobs/{item['url']}.json", "r")
                     lines = cronjob_created.read()
+                    lines.close()
             
         return {"SAVED": True, "DUPLICATES" : duplicates}
         
