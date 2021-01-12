@@ -15,14 +15,14 @@ import json
 import datetime
 
 
-params = pymysql.connect(user="*********", password='******', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
+params = pymysql.connect(user="*********", password='******', host="****", port=0000, database="delete_vendors")
 
 conn_str = f"mysql+pymysql:///{params}?charset=utf8mb4"
 engine_azure = create_engine(conn_str,echo=True)
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://**:*********@rivn-db-dev.mysql.database.azure.com:3306/delete_vendors"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://**:*********@***********/delete_vendors"
 
 
 db = SQLAlchemy(app)
@@ -117,10 +117,10 @@ class AuditResults(db.Model):
 
 class RivnScrape():
     def __init__(self):
-        app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://jtippets@rivn-db-dev:Jacks0n1@rivn-db-dev.mysql.database.azure.com:3306/audit_results"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "**********@**********/audit_results"
 class BackToNormal():
     def __init__(self):
-        app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://jtippets@rivn-db-dev:Jacks0n1@rivn-db-dev.mysql.database.azure.com:3306/delete_vendors"
+        app.config["SQLALCHEMY_DATABASE_URI"] = "*(**********"
 class CheckPlace():
     def __init__(self, num):
         self.num = num
