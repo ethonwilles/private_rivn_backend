@@ -2,7 +2,7 @@
 
 import pymysql
 from sqlalchemy import create_engine, update
-import urllib
+import urllibc
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, jsonify, render_template, send_from_directory, send_file
 
@@ -15,14 +15,14 @@ import json
 import datetime
 
 
-params = pymysql.connect(user="jtippets@rivn-db-dev", password='Jacks0n1', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
+params = pymysql.connect(user="*********", password='******', host="rivn-db-dev.mysql.database.azure.com", port=3306, database="delete_vendors")
 
 conn_str = f"mysql+pymysql:///{params}?charset=utf8mb4"
 engine_azure = create_engine(conn_str,echo=True)
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://jtippets@rivn-db-dev:Jacks0n1@rivn-db-dev.mysql.database.azure.com:3306/delete_vendors"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://**:*********@rivn-db-dev.mysql.database.azure.com:3306/delete_vendors"
 
 
 db = SQLAlchemy(app)
